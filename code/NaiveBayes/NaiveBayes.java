@@ -67,12 +67,12 @@ public class NaiveBayes {
             HashSet<String> tokens = tokenSet(spams[i]);
             for (String token : tokens) {
                 if (!spam.containsKey(token)) {
-                    spam.put(token, 0)
+                    spam.put(token, 0);
                 }
                 if (!ham.containsKey(token)) {
                     ham.put(token, 1);
                 }
-                int value = spams.get(token);
+                int value = spam.get(token);
                 value++;
                 spam.put(token, value);
             }
@@ -126,7 +126,7 @@ public class NaiveBayes {
             if (result > 0.5) {
                 tag = "spam";
             }
-            System.out.println((i + 1) + ".txt " + "tag");
+            System.out.println((i + 1) + ".txt " + tag);
         }
     }
 
