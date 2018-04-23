@@ -19,12 +19,12 @@ public class NaiveBayes {
 
     // store info about each word's number of appearance
     // in the spams and hams
-    private Map<String, int> spam = new HashMap<String, int>();
-    private Map<String, int> ham = new HashMap<String, int>();
+    private Map<String, Integer> spam = new HashMap<String, Integer>();
+    private Map<String, Integer> ham = new HashMap<String, Integer>();
 
     // for storing info about P(w|S) and P(w|H)
-    private Map<String, double> PrS = new HashMap<String, double>();
-    private Map<String, double> PrH = new HashMap<String, double>();
+    private Map<String, Double> PrS = new HashMap<String, Double>();
+    private Map<String, Double> PrH = new HashMap<String, Double>();
 
     /*
      * !! DO NOT CHANGE METHOD HEADER !!
@@ -47,7 +47,7 @@ public class NaiveBayes {
         PH = NUM_SPAM * 1.0 / (NUM_SPAM + NUM_HAM * 1.0);
 
         // processing hams
-        for (int i = 0; i < hams.length) {
+        for (int i = 0; i < hams.length; i++) {
             HashSet<String> tokens = tokenSet(hams[i]);
             for (String token : tokens) {
                 if (!ham.containsKey(token)) {
@@ -63,7 +63,7 @@ public class NaiveBayes {
         }
 
         // processing spams
-        for (int i = 0; i < spams.length) {
+        for (int i = 0; i < spams.length; i ++) {
             HashSet<String> tokens = tokenSet(spams[i]);
             for (String token : tokens) {
                 if (!spam.containsKey(token)) {
@@ -122,9 +122,9 @@ public class NaiveBayes {
                 }
             }
             double result = SS / (SS + HH);
-            String tag = ham;
+            String tag = "ham";
             if (result > 0.5) {
-                tag = spam;
+                tag = "spam";
             }
             System.out.println((i + 1) + ".txt " + "tag");
         }
