@@ -9,9 +9,8 @@ import java.util.*;
 public class NaiveBayes {
     // store how many spams and hams emails
     // we have processed
-    // for smoothing, we initialize them as 2
-    private int NUM_HAM = 2;
-    private int NUM_SPAM = 2;
+    private int NUM_HAM = 0;
+    private int NUM_SPAM = 0;
 
     //P(S) and P(H)
     private double PS = 0.0;
@@ -82,7 +81,7 @@ public class NaiveBayes {
             int value = ham.get(token);
             // for smoothing
             value++;
-            PrH.put(token, value*1.0/NUM_HAM);
+            PrH.put(token, value*1.0/(NUM_HAM + 2.0));
         }
 
         // processing probability
@@ -90,7 +89,7 @@ public class NaiveBayes {
             int value = spam.get(token);
             // for smoothing
             value++;
-            PrS.put(token, value*1.0/NUM_SPAM);
+            PrS.put(token, value*1.0/(NUM_SPAM + 2.0));
         }
     }
 
