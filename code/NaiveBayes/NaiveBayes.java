@@ -4,8 +4,27 @@
 import java.io.*;
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.*;
 
 public class NaiveBayes {
+    // store how many spams and hams emails
+    // we have processed
+    // for smoothing, we initialize them as 2
+    private int NUM_HAM = 2;
+    private int NUM_SPAM = 2;
+
+    //P(S) and P(H)
+    private double PS = 0.0;
+    private double PH = 0.0;
+
+    // store info about each word's number of appearance
+    // in the spams and hams
+    private Map<String, int> spam = new HashMap<String, int>();
+    private Map<String, int> ham = new HashMap<String, int>();
+
+    // for storing info about P(w|S) and P(w|H)
+    private Map<String, double> PrS = new HashMap<String, double>();
+    private Map<String, double> PrH = new HashMap<String, double>();
 
     /*
      * !! DO NOT CHANGE METHOD HEADER !!
@@ -20,8 +39,59 @@ public class NaiveBayes {
      *      spams - email files labeled as 'spam'
      */
     public void train(File[] hams, File[] spams) throws IOException {
-        // TODO: remove the exception and add your code here
-        throw new UnsupportedOperationException("Not implemented.");
+        // update NUMS
+        this.NUM_HAM += hams.length;
+        this.NUM_SPAM += spams.length;
+
+        PS = NUM_SPAM * 1.0 / (NUM_SPAM + NUM_HAM * 1.0);
+        PH = NUM_SPAM * 1.0 / (NUM_SPAM + NUM_HAM * 1.0);
+
+        // processing hams
+        for (int i = 0; i < hams.length) {
+            HashSet<String> tokens = tokenSet(hams[i]);
+            for (String token : tokens) {
+                if (!ham.containsKey(token)) {
+                    ham.put(token, 0);
+                }
+                if (!spam.containsKey(token)) {
+                    spam.put(token, 1);
+                }
+                int value = ham.get(token);
+                value++;
+                ham.put(token, value);
+            }
+        }
+
+        // processing spams
+        for (int i = 0; i < spams.length) {
+            HashSet<String> tokens = tokenSet(spams[i]);
+            for (String token : tokens) {
+                if (!spam.containsKey(token)) {
+                    spam.put(token, 0)
+                }
+                if (!ham.containsKey(token)) {
+                    ham.put(token, 1);
+                }
+                int value = spams.get(token);
+                value++;
+                spam.put(token, value);
+            }
+        }
+        // processing Probability
+        for (String token : ham.keySet()) {
+            int value = ham.get(token);
+            // for smoothing
+            value++;
+            PrH.put(token, value*1.0/NUM_HAM);
+        }
+
+        // processing probability
+        for (String token : spam.keySet()) {
+            int value = spam.get(token);
+            // for smoothing
+            value++;
+            PrS.put(token, value*1.0/NUM_SPAM);
+        }
     }
 
     /*
@@ -40,8 +110,24 @@ public class NaiveBayes {
      *      emails - unlabeled email files to be classified
      */
     public void classify(File[] emails) throws IOException {
-        // TODO: remove the exception and add your code here
-        throw new UnsupportedOperationException("Not implemented.");
+        for (int i = 0; i < emails.length; i ++) {
+            double SS = Math.log(PS);
+            double HH = Math.log(PH);
+            HashSet<String> tokens = tokenSet(emails[i]);
+            for (String token : tokens) {
+                // check if the token is seen in our data
+                if (this.ham.containsKey(token)) {
+                    SS += Math.log(PrS.get(token));
+                    HH += Math.log(PrH.get(token));
+                }
+            }
+            double result = SS / (SS + HH);
+            String tag = ham;
+            if (result > 0.5) {
+                tag = spam;
+            }
+            System.out.println((i + 1) + ".txt " + "tag");
+        }
     }
 
 
