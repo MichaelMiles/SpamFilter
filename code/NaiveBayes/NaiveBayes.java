@@ -44,7 +44,7 @@ public class NaiveBayes {
         this.NUM_SPAM += spams.length;
 
         PS = NUM_SPAM * 1.0 / (NUM_SPAM + NUM_HAM * 1.0);
-        PH = NUM_SPAM * 1.0 / (NUM_SPAM + NUM_HAM * 1.0);
+        PH = NUM_HAM * 1.0 / (NUM_SPAM + NUM_HAM * 1.0);
 
         // processing hams
         for (int i = 0; i < hams.length; i++) {
@@ -54,7 +54,7 @@ public class NaiveBayes {
                     ham.put(token, 0);
                 }
                 if (!spam.containsKey(token)) {
-                    spam.put(token, 1);
+                    spam.put(token, 0);
                 }
                 int value = ham.get(token);
                 value++;
@@ -70,7 +70,7 @@ public class NaiveBayes {
                     spam.put(token, 0);
                 }
                 if (!ham.containsKey(token)) {
-                    ham.put(token, 1);
+                    ham.put(token, 0);
                 }
                 int value = spam.get(token);
                 value++;
@@ -126,7 +126,7 @@ public class NaiveBayes {
             if (result > 0.5) {
                 tag = "spam";
             }
-            System.out.println((i + 1) + ".txt " + tag);
+            System.out.println(emails[i].getName() + " " + tag);
         }
     }
 
