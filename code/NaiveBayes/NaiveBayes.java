@@ -121,11 +121,9 @@ public class NaiveBayes {
                     HH += Math.log(PrH.get(token));
                 }
             }
-            double result = SS / (SS + HH);
-            String tag = "ham";
-            if (result > 0.5) {
-                tag = "spam";
-            }
+
+            String tag = SS > HH ? "spam" : "ham";
+
             System.out.println(emails[i].getName() + " " + tag);
         }
     }
